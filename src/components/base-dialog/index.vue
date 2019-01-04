@@ -8,65 +8,67 @@
       />
     </transition>
     <transition name="dialog-bounce">
-      <slot>
-        <div
-          class="dialog-container"
-          v-show="show"
-        >
-          <i
-            v-if="showCloseButton"
-            class="icon-close"
-            @click="handleAction('close')"
-          />
+      <div
+        class="dialog-container"
+        v-show="show"
+      >
+        <slot>
+          <div class="dialog-content-container">
+            <i
+              v-if="showCloseButton"
+              class="iconfont icon-close"
+              @click="handleAction('close')"
+            />
 
-          <div
-            class="dialog-title"
-            v-if="title || $slots.title"
-          >
-            <slot name="title">
-              {{ title }}
-            </slot>
-          </div>
+            <div
+              class="dialog-title"
+              v-if="title || $slots.title"
+            >
+              <slot name="title">
+                {{ title }}
+              </slot>
+            </div>
 
-          <div
-            class="dialog-message-container"
-            v-if="message || $slots.message"
-          >
-            <slot name="message">
-              <div v-html="message" />
-            </slot>
-          </div>
+            <div
+              class="dialog-message-container"
+              v-if="message || $slots.message"
+            >
+              <slot name="message">
+                <div v-html="message" />
+              </slot>
+            </div>
 
-          <div
-            class="dialog-buttons-container"
-            v-if="showCancelButton || showConfirmButton || $slots.buttons"
-          >
-            <slot name="buttons">
-              <a
-                class="button cancel"
-                @click="handleAction('cancel')"
-                v-if="showCancelButton"
-              >
-                {{ cancelButtonText }}
-              </a>
-              <a
-                class="button confirm"
-                @click="handleAction('confirm')"
-                v-if="showConfirmButton"
-              >
-                {{ confirmButtonText }}
-              </a>
-            </slot>
+            <div
+              class="dialog-buttons-container"
+              v-if="showCancelButton || showConfirmButton || $slots.buttons"
+            >
+              <slot name="buttons">
+                <a
+                  class="button cancel"
+                  @click="handleAction('cancel')"
+                  v-if="showCancelButton"
+                >
+                  {{ cancelButtonText }}
+                </a>
+                <a
+                  class="button confirm"
+                  @click="handleAction('confirm')"
+                  v-if="showConfirmButton"
+                >
+                  {{ confirmButtonText }}
+                </a>
+              </slot>
+            </div>
           </div>
-        </div>
-      </slot>
+        </slot>
+      </div>
     </transition>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'BaseDialog',
+  name: 'PopupDialog',
   model: {
     prop: 'value',
     event: 'change'
@@ -188,71 +190,74 @@ export default {
     right: 0;
     bottom: 0;
     left: 0;
-    margin: auto;
     z-index: 2001;
-    display: table;
-    width: 85%;
-    border-radius: 10px;
-    box-sizing: border-box;
-    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
     line-height: initial;
-    background: #fff;
+    .dialog-content-container {
+      position: relative;
+      width: 85%;
+      border-radius: 10px;
+      background: #fff;
 
-    .icon-close {
-      position: absolute;
-      right: 20px;
-      top: 20px;
-      width: 20px;
-      height: 20px;
-      line-height: 20px;
-      border-radius: 50%;
-      text-align: center;
-      font-size: 16px;
-      font-weight: bold;
-      background: url(./icon-close.png) center center / contain no-repeat;
-    }
-
-    .dialog-title {
-      font-size: 16px;
-      color: #333;
-      text-align: center;
-      font-weight: 500;
-      margin: 20px;
-    }
-
-    .dialog-message-container {
-      font-size: 14px;
-      color: #333;
-      line-height: 24px;
-      margin: 10px 20px;
-      text-align: center;
-    }
-
-    .dialog-buttons-container {
-      display: flex;
-      text-align: center;
-      margin: 20px 10px;
-
-      .button {
-        flex: 1;
-        height: 34px;
-        line-height: 34px;
-        margin: 0 10px;
-        font-size: 16px;
-        background: #449afd;
-        border: 1px solid #449afd;
-        color: #fff;
-        border-radius: 18px;
+      .icon-close {
+        position: absolute;
+        right: 20px;
+        top: 20px;
+        z-index: 2001;
+        line-height: 20px;
+        border-radius: 50%;
         text-align: center;
+        font-size: 16px;
+        font-weight: bold;
+      }
 
-        &.cancel {
-          background: transparent;
-          color: #999;
-          border: 1px solid #999;
+      .dialog-title {
+        font-size: 16px;
+        color: #333;
+        text-align: center;
+        font-weight: 500;
+        margin: 20px;
+      }
+
+      .dialog-message-container {
+        font-size: 14px;
+        color: #333;
+        line-height: 24px;
+        margin: 10px 20px;
+        text-align: center;
+      }
+
+      .dialog-buttons-container {
+        display: flex;
+        text-align: center;
+        margin: 20px 10px;
+
+        .button {
+          flex: 1;
+          height: 34px;
+          line-height: 34px;
+          margin: 0 10px;
+          font-size: 16px;
+          background: #449afd;
+          border: 1px solid #449afd;
+          color: #fff;
+          border-radius: 18px;
+          text-align: center;
+
+          &.cancel {
+            background: transparent;
+            color: #999;
+            border: 1px solid #999;
+          }
         }
       }
     }
   }
+
   .dialog-mask-enter-active {
     transition: all 0.3s;
   }
