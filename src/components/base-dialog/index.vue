@@ -68,7 +68,7 @@
 
 <script>
 export default {
-  name: 'PopupDialog',
+  name: 'BaseDialog',
   model: {
     prop: 'value',
     event: 'change'
