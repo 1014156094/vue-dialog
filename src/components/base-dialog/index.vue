@@ -1,27 +1,27 @@
 <template>
-  <div class="popup-container">
+  <div class="cb-popop--container">
     <transition name="dialog-mask">
       <div
-        class="mask"
+        class="cb-popup__mask"
         @click="onMask"
         v-show="show"
       />
     </transition>
     <transition name="dialog-bounce">
       <div
-        class="dialog-container"
+        class="cb-popup__dialog--container"
         v-show="show"
       >
         <slot>
-          <div class="dialog-content-container">
+          <div class="cb-popup__dialog__content">
             <i
               v-if="showCloseButton"
-              class="iconfont icon-close"
+              class="cb-popup__dialog__content__close"
               @click="handleAction('close')"
             />
 
             <div
-              class="dialog-title"
+              class="cb-popup__dialog__content__title"
               v-if="title || $slots.title"
             >
               <slot name="title">
@@ -30,7 +30,7 @@
             </div>
 
             <div
-              class="dialog-message-container"
+              class="cb-popup__dialog__content__message"
               v-if="message || $slots.message"
             >
               <slot name="message">
@@ -39,19 +39,19 @@
             </div>
 
             <div
-              class="dialog-buttons-container"
+              class="cb-popup__dialog__content__buttons"
               v-if="showCancelButton || showConfirmButton || $slots.buttons"
             >
               <slot name="buttons">
                 <a
-                  class="button cancel"
+                  class="cb-popup__dialog__content__buttons__item cancel"
                   @click="handleAction('cancel')"
                   v-if="showCancelButton"
                 >
                   {{ cancelButtonText }}
                 </a>
                 <a
-                  class="button confirm"
+                  class="cb-popup__dialog__content__buttons__item confirm"
                   @click="handleAction('confirm')"
                   v-if="showConfirmButton"
                 >
@@ -68,7 +68,7 @@
 
 <script>
 export default {
-  name: 'BaseDialog',
+  name: 'CbDialog',
   model: {
     prop: 'value',
     event: 'change'
@@ -126,24 +126,24 @@ export default {
     }
   },
   watch: {
-    value (newVal) {
+    value(newVal) {
       this.show = newVal
     }
   },
-  data () {
+  data() {
     return {
       show: this.value // 可见状态
     }
   },
   methods: {
     // 遮罩
-    onMask () {
-      if (this.closeOnClickOverlay === true) {
+    onMask() {
+      if (this.closeOnClickOverlay) {
         this.onClose()
       }
     },
     // 操作动作处理
-    handleAction (action) {
+    handleAction(action) {
       if (this.beforeClose) {
         /**
          * action [String] 操作动作，目前有cancel或confirm
@@ -159,7 +159,7 @@ export default {
       }
     },
     // 关闭
-    onClose (action) {
+    onClose(action) {
       this.show = false
       this.$emit('change', this.show)
       this.$emit(action)
@@ -169,11 +169,11 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.popup-container {
+.cb-popop--container {
   display: flex;
   justify-content: center;
   align-items: center;
-  .mask {
+  .cb-popup__mask {
     position: fixed;
     left: 0;
     top: 0;
@@ -183,7 +183,7 @@ export default {
     background: rgba(0, 0, 0, 0.7);
   }
 
-  .dialog-container {
+  .cb-popup__dialog--container {
     flex: none;
     position: fixed;
     top: 0;
@@ -197,13 +197,13 @@ export default {
     width: 100%;
     height: 100%;
     line-height: initial;
-    .dialog-content-container {
+    .cb-popup__dialog__content {
       position: relative;
       width: 85%;
-      border-radius: 10px;
+      border-radius: 4px;
       background: #fff;
 
-      .icon-close {
+      .cb-popup__dialog__content__close {
         position: absolute;
         right: 20px;
         top: 20px;
@@ -213,9 +213,10 @@ export default {
         text-align: center;
         font-size: 16px;
         font-weight: bold;
+        background: url(./icon-close) center center / contain no-repeat;
       }
 
-      .dialog-title {
+      .cb-popup__dialog__content__title {
         font-size: 16px;
         color: #333;
         text-align: center;
@@ -223,7 +224,7 @@ export default {
         margin: 20px;
       }
 
-      .dialog-message-container {
+      .cb-popup__dialog__content__message {
         font-size: 14px;
         color: #333;
         line-height: 24px;
@@ -231,19 +232,19 @@ export default {
         text-align: center;
       }
 
-      .dialog-buttons-container {
+      .cb-popup__dialog__content__buttons {
         display: flex;
         text-align: center;
         margin: 20px 10px;
 
-        .button {
+        .cb-popup__dialog__content__buttons__item {
           flex: 1;
           height: 34px;
           line-height: 34px;
           margin: 0 10px;
           font-size: 16px;
-          background: #449afd;
-          border: 1px solid #449afd;
+          background: #ff7f00;
+          border: 1px solid #ff7f00;
           color: #fff;
           border-radius: 18px;
           text-align: center;
@@ -274,9 +275,12 @@ export default {
   .dialog-bounce-leave-active {
     transition: all 0.3s;
   }
-  .dialog-bounce-enter,
-  .dialog-bounce-leave-to {
+  .dialog-bounce-enter {
     transform: scale(0.7);
+    opacity: 0;
+  }
+  .dialog-bounce-leave-to {
+    transform: scale(0.9);
     opacity: 0;
   }
 }
